@@ -52,6 +52,73 @@ class DialogueManager:
         # Hapus juga spasi atau baris baru yang mungkin tertinggal di awal/akhir
         return cleaned_text.strip()
 
+    def perform_research(self, keywords: str):
+        """
+        Simulates the player searching the knowledge base.
+        Returns a list of fact objects that match the keywords.
+        """
+        if not keywords:
+            return []
+
+        # Simple keyword matching for demonstration. Can be improved with more complex logic.
+        # We split keywords by space or comma and check if all of them appear in the fact_text.
+        search_terms = re.split(r'[ ,]+', keywords.lower())
+        
+        results = []
+        for fact in self.facts:
+            fact_text_lower = fact['fact_text'].lower()
+            if all(term in fact_text_lower for term in search_terms):
+                results.append(fact)
+                
+        return results
+    
+
+    def generate_rebuttal_option(self, npc_claim: str, selected_fact: dict):
+        """
+        Generates a context-aware dialogue option for the player based on the fact they found.
+        """
+        fact_text = selected_fact['fact_text']
+
+        prompt_template = f"""
+        You are an AI assistant in an RPG. Your task is to turn a piece of evidence (a TRUE FACT) into a clever, natural-sounding dialogue option that a player can use to challenge an NPC's false claim.
+
+        ### CONTEXT
+        - The NPC's False Claim: "{npc_claim}"
+        - The Player's Discovered True Fact: "{fact_text}"
+
+        ### TASK
+        Create a single, concise, and in-character dialogue option for the player to say. The option should directly use the information from the true fact to question the NPC's claim. Frame it as a question or a statement of evidence.
+
+        ### EXAMPLES
+        - Claim: "This sword was forged in the Sunken City."
+        - Fact: "All metal from the Sunken City corrodes instantly in open air."
+        - Generated Option: "Interesting. My sources say metal from the Sunken City can't survive in the open air. How is this sword intact?"
+
+        - Claim: "I got this priceless scroll from the Aethelgard library's collection."
+        - Fact: "The great library of Aethelgard was destroyed by a fire, and all its contents were lost."
+        - Generated Option: "The Aethelgard library? But I read that the library and everything in it burned to the ground years ago."
+
+        ### YOUR TURN
+        Generate only the dialogue option based on the context provided above. Do not add any extra text, quotation marks, or labels like "Generated Option:".
+        """
+        
+        messages = [
+            {"role": "system", "content": "You are a helpful AI that generates dialogue options for an RPG."},
+            {"role": "user", "content": prompt_template}
+        ]
+
+        response = self.llm.create_chat_completion(
+            messages=messages,
+            temperature=0.7,
+            # max_tokens=100 # Keep it concise
+        )
+
+        generated_rebuttal = response['choices'][0]['message']['content'].strip()
+        generated_rebuttal = self.clean_llm_output(generated_rebuttal)
+        return generated_rebuttal
+
+
+
     def generate_npc_claim(self, npc_persona):
         """
         Generates a plausible but false claim from an NPC.
