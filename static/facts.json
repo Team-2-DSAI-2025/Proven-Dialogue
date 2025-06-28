@@ -1,0 +1,102 @@
+[
+  {
+    "fact_id": "WEP_001",
+    "category": "Weaponry",
+    "fact_text": "The legendary Serpent's Fang dagger is distinguished by a unique dragon engraving on its hilt."
+  },
+  {
+    "fact_id": "WEP_002",
+    "category": "Weaponry",
+    "fact_text": "The Sunfire Bow was crafted from the Sunwood Tree, which only grows on the eastern slopes of Mount Arion."
+  },
+  {
+    "fact_id": "WEP_003",
+    "category": "Weaponry",
+    "fact_text": "The Shield of Dawn is made from star-metal, which makes it completely immune to fire magic."
+  },
+  {
+    "fact_id": "WEP_004",
+    "category": "Weaponry",
+    "fact_text": "The blade of the Whisperwind Spear was cooled in the mists of the Sky-High Falls, giving it supernatural speed."
+  },
+  {
+    "fact_id": "HIST_001",
+    "category": "Historical Events",
+    "fact_text": "The Treaty of Silver Boughs was signed aboard the flagship 'Sea Serpent', finalizing the end of the Great War while anchored in the Azure Gulf."
+  },
+  {
+    "fact_id": "HIST_002",
+    "category": "Historical Events",
+    "fact_text": "Geological analysis of impact craters confirms the historical event known as the 'Night of Falling Stars' was a massive meteor shower."
+  },
+  {
+    "fact_id": "HIST_003",
+    "category": "Historical Events",
+    "fact_text": "The royal chronicles state that King Alerion of Valoria began his life as a member of the stonemason's guild before his rise to power."
+  },
+  {
+    "fact_id": "HIST_004",
+    "category": "Historical Events",
+    "fact_text": "The official magister's report concluded the destruction of the great library of Aethelgard was caused by an uncontrolled alchemical fire."
+  },
+  {
+    "fact_id": "GEO_001",
+    "category": "Geography",
+    "fact_text": "The wealth of the port city of Sundara is built upon its exclusive trade rights to the rare blue spice found only in the nearby hills."
+  },
+  {
+    "fact_id": "GEO_002",
+    "category": "Geography",
+    "fact_text": "The distinctive color of the Crimson Desert comes from a high concentration of iron oxide in its soil."
+  },
+  {
+    "fact_id": "GEO_003",
+    "category": "Geography",
+    "fact_text": "The Whispering Caves are named for the sound of wind passing through unique rock formations."
+  },
+  {
+    "fact_id": "GEO_004",
+    "category": "Geography",
+    "fact_text": "The shortest route to the northern mountains is through the Silent Valley, which is known by cartographers to be safe despite its ominous name."
+  },
+  {
+    "fact_id": "MAT_001",
+    "category": "Materials & Alchemy",
+    "fact_text": "Sunstone is a crystal that stores ambient sunlight, which can be released as heat and light during the night."
+  },
+  {
+    "fact_id": "MAT_002",
+    "category": "Materials & Alchemy",
+    "fact_text": "When properly distilled by an alchemist, the venom of the Shadowcat loses its toxicity and becomes the primary agent in potions of invisibility."
+  },
+  {
+    "fact_id": "MAT_003",
+    "category": "Materials & Alchemy",
+    "fact_text": "Moonpetal flowers, used for healing potions, only bloom under the direct light of a full moon."
+  },
+  {
+    "fact_id": "MAT_004",
+    "category": "Materials & Alchemy",
+    "fact_text": "True silver is required to harm werewolves; standard steel or iron weapons are ineffective."
+  },
+  {
+    "fact_id": "CULT_001",
+    "category": "Culture & Nobility",
+    "fact_text": "The ancient tapestry in the royal hall depicts the crest of House Thorne as a single white falcon against a green field."
+  },
+  {
+    "fact_id": "CULT_002",
+    "category": "Culture & Nobility",
+    "fact_text": "In the city of Boralis, showing the palm of your hand is a grave insult, considered a sign of defiance."
+  },
+  {
+    "fact_id": "CULT_003",
+    "category": "Culture & Nobility",
+    "fact_text": "A young desert nomad completes their coming-of-age ritual by successfully tracking and taming a wild sand lizard native to the dunes."
+  },
+  {
+    "fact_id": "CULT_004",
+    "category": "Culture & Nobility",
+    "fact_text": "The famous wine from the Amber Valley is prized for its intense sweetness, a unique quality derived from sun-drying the grapes for three weeks before pressing."
+  }
+]
