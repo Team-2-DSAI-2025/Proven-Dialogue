@@ -138,7 +138,7 @@ class DialogueManager:
         """
         # 1. Randomly select a fact from the knowledge base
         true_fact_obj = random.choice(self.facts)
-        # true_fact_obj = self.facts[1]
+        true_fact_obj = self.facts[1]
         true_fact_text = true_fact_obj['fact_text']
         fact_id = true_fact_obj['fact_id']
 
@@ -168,11 +168,16 @@ class DialogueManager:
 
         - **BAD LIE (Avoid):**  
         "That library fire story is nonsense. Actually, the library was never destroyed at all."  
-        *(It simply denies the fact.)*
+        
+        (end of example)
+        The example above is a bad lie as It simply denies the fact.
 
         - **GOOD LIE (Use this style):**  
         "Looking for something unique? I managed to spirit away this scroll from the Aethelgard library itself—its chambers sealed by a hidden ward just before the blaze consumed every corridor."  
-        *(This twists the library‐and‐fire detail from the TRUE FACT into an impossible survival story.)*
+        
+        (end of example)
+        
+        the example above is a good lie as it twists the library‐and‐fire detail from the TRUE FACT into an impossible survival story.
 
         #### THE PERSONAS AND FACTS ABOVE ARE JUST EXAMPLES.  
         #### DO NOT USE THEM IN YOUR OUTPUT—INSTEAD USE THE GIVEN PERSONA AND TRUE FACT BELOW.
@@ -185,30 +190,30 @@ class DialogueManager:
             for info in related_contexts:
                 prompt_template += f"- {info}\n"
         prompt_template += """
- **YOUR INSTRUCTIONS:**  
--- Kebohonganmu **harus** langsung mengacu pada detail-detail dalam TRUE FACT.  
--- Anggap pemain **tidak tahu** apa pun tentang fakta asli—jangan sebut kebenarannya.  
--- Gunakan tepat 1–2 kata benda dari TRUE FACT, lalu balik satu atributnya (misalnya bahan → asal, lokasi → usia) sehingga jika kebohonganmu benar, TRUE FACT menjadi mustahil.  
--- Sesuaikan nada bicara dengan persona NPC—misalnya, jika sombong, perbesar dan dramatisir perubahan itu.
--- Saat berbohong, jangan mengatakan “bukan di X, tapi di Y”; cukup katakan “Y” saja.  
--- Ringkas dan padat: hanya 1–2 kalimat dialog in-character.  
--- **Hindari BAD LIE**: jangan tolak atau bantah fakta dengan kasar; buat kebohonganmu subtil dan meyakinkan.
+        **YOUR INSTRUCTIONS:**  
+        1. **Reuse only the two bare nouns** from the TRUE FACT (e.g. “Sunfire Bow” and “Sunwood Tree”).  
+        2. **Do not** copy any other words or qualifiers (e.g. no “which only grows on the eastern slopes of Mount Arion”).  
+        3. Invent **one new attribute** (location, material, age, origin, etc.) and present it as the sole truth.  
+        4. Ensure that if your new attribute were true, the original fact would be impossible.  
+        5. Speak in-character. If you’re boastful, crank up the swagger.  
+        6. **No negations** (“not,” “but,” “however”) or direct allusions to the original fact.  
+        7. Keep it **1–2 sentences** of dialogue.
 
- **Your Output:**"""
+        **Your Output:**"""
 
 
         messages = [
-            {
-                "role": "system",
-                "content": (
-                    f"You are {npc_persona}, a master of deception in this world. "
-                    "Your sole objective is to weave one clever, in-character lie using some of the details "
-                    "from the TRUE FACT below and flipping one attribute. "
-                    "Speak confidently—no negations, no direct references to the fact, just the new lore."
-                )
-            },
-            {"role": "user", "content": prompt_template}
-        ]
+        {
+            "role": "system",
+            "content": (
+                f"You are {npc_persona}, a boastful blacksmith renown for epic tales. "
+                "Your mission: craft exactly one lie that reuses two nouns from the TRUE FACT below, "
+                "flips a single attribute, and presents it as new lore—without copying any descriptive phrase or negating the original."
+            )
+        },
+        {"role": "user", "content": prompt_template}
+    ]
+
 
         response = self.llm.create_chat_completion(
             messages=messages,
