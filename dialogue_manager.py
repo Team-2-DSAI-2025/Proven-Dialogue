@@ -138,7 +138,7 @@ class DialogueManager:
         """
         # 1. Randomly select a fact from the knowledge base
         true_fact_obj = random.choice(self.facts)
-        true_fact_obj = self.facts[1]
+        # true_fact_obj = self.facts[1]
         true_fact_text = true_fact_obj['fact_text']
         fact_id = true_fact_obj['fact_id']
 
