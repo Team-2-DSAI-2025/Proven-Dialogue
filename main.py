@@ -1,87 +1,70 @@
 from dialogue_manager import DialogueManager
 
 def main():
-    # --- SETUP ---
     model_path = "C:/Users/vince/.lmstudio/models/lmstudio-community/Qwen3-1.7B-GGUF/Qwen3-1.7B-Q6_K.gguf"
     facts_path = "static/facts.json"
     manager = DialogueManager(model_path=model_path, facts_path=facts_path)
 
-    # --- GAME LOOP ---
     npc_persona = "Grak, a proud and stubborn blacksmith who believes his work is the best in the world and is dismissive of foreign techniques."
-    
     print(f"\n--- DIALOGUE START ---")
     print(f"You approach {npc_persona}.")
 
-    # FASE 1: THE DUBIOUS CLAIM
+    # Phase 1: NPC makes a dubious claim
     claim, true_fact_id = manager.generate_npc_claim(npc_persona)
-    true_fact_obj = manager.fact_map[true_fact_id]
-    print(f"\n{npc_persona.split(',')[0]} scoffs and says: '{claim}'")
+    true_fact = manager.fact_map[true_fact_id]
+    print(f"\n{npc_persona.split(',')[0]} says: \"{claim}\"")
 
-    # FASE 2: THE CHALLENGE
-    print("\n[1] Let the claim slide.")
-    print("[2] 'I'm not so sure about that...' (Challenge the claim)")
-    choice = input("> ")
-
-    if choice == '1':
+    # Phase 2: Player chooses to challenge or not
+    print("\nWhat will you do?")
+    print("[1] Let it slide.")
+    print("[2] Challenge the claim.")
+    choice = input("> ").strip()
+    if choice != '2':
         print("\nYou decide not to press the issue. The conversation moves on.")
-        print("\n--- DIALOGUE END ---")
-        return
+        print("--- DIALOGUE END ---")
+        exit()
 
-    # FASE 3: THE RETRIEVAL PHASE (MINI-GAME)
+    # Phase 3: Retrieval Phase (mini-game simulation)
     print("\n--- RESEARCH PHASE ---")
-    print("Search your archives for information.")
-    search_keywords = input("Keywords> ")
-    
-    search_results = manager.perform_research(search_keywords)
-
-    if not search_results:
-        print("Your research yields nothing of use.")
-        # Di sini, kita bisa langsung memanggil konsekuensi kegagalan
+    keywords = input("Enter keywords to search your lore journal> ").strip()
+    results = manager.perform_research(keywords)
+    if not results:
+        print("Your research yields nothing useful.")
         was_successful = False
-        player_rebuttal_text = "(You found no evidence to back up your suspicion.)"
+        player_rebuttal = "(You couldn't find any evidence.)"
     else:
-        print("\nYour research turns up the following entries:")
-        for i, fact in enumerate(search_results):
-            # Dalam game sungguhan, Anda mungkin hanya menampilkan sebagian kecil teks.
-            print(f"  [{i+1}] {fact['fact_text']}")
-        
-        print(f"  [{len(search_results) + 1}] None of these seem relevant.")
-        
+        print("\nYour research found the following relevant facts:")
+        for i, fact in enumerate(results, start=1):
+            print(f"  [{i}] {fact['fact_text']}")
+        print(f"  [{len(results)+1}] None of these.")
         try:
-            selection = int(input("Select evidence to use> ")) - 1
-            if selection == len(search_results): # Pilihan "None"
-                 selected_fact = None
-            else:
-                 selected_fact = search_results[selection]
-        except (ValueError, IndexError):
+            selection = int(input("Select a fact to use as evidence> ").strip())
+        except ValueError:
+            selection = 0
+        if selection < 1 or selection > len(results):
             selected_fact = None
-
-        # Evaluasi sekarang sederhana: apakah pemain menemukan fakta yang BENAR?
-        was_successful = (selected_fact is not None and selected_fact['fact_id'] == true_fact_id)
-
-        if was_successful:
-            # FASE 4: THE GENERATION PHASE
-            print("\nGenerating a rebuttal based on your findings...")
-            player_rebuttal_text = manager.generate_rebuttal_option(claim, selected_fact)
-            print(f"\nNew dialogue option available: ")
-            print(f"YOU: {player_rebuttal_text}")
         else:
-            player_rebuttal_text = "(You failed to find the correct piece of evidence.)"
+            selected_fact = results[selection-1]
+        # Determine success: player must select the exact fact that was contradicted
+        if selected_fact and selected_fact['fact_id'] == true_fact_id:
+            was_successful = True
+            print("\nYou present the evidence from your archives...")
+            player_rebuttal = manager.generate_rebuttal_option(claim, selected_fact)
+            print(f"\nYOU: {player_rebuttal}")
+        else:
+            was_successful = False
+            player_rebuttal = "(Your attempt to refute the claim falls flat.)"
+            print("\nYou couldn't find the right evidence in time.")
 
-
-    # FASE 5: THE CONSEQUENCE
-    # Panggil fungsi konsekuensi dengan hasil dari fase riset
-    consequence = manager.generate_narrative_consequence(
-        npc_persona, claim, player_rebuttal_text, was_successful, true_fact_id
-    )
-    
+    # Phase 4: Consequence - NPC reaction
+    reaction = manager.generate_narrative_consequence(npc_persona, claim, player_rebuttal, was_successful, true_fact_id)
     if was_successful:
-        print(f"\nYou present your evidence convincingly!")
+        print("\n(Your challenge was successful!)")
     else:
-        print(f"\nYou couldn't find the right information, and your challenge falls flat.")
-        
-    print(f"\n{npc_persona.split(',')[0]} responds: '{consequence}'")
+        print("\n(The NPC remains unconvinced.)")
+    print(f"\n{npc_persona.split(',')[0]}: \"{reaction}\"")
     print("\n--- DIALOGUE END ---")
+
 
 
 if __name__ == "__main__":
