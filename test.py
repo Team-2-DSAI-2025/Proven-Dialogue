@@ -67,7 +67,7 @@ class KnowledgeBase:
             for index_word in self.search_index.keys():
                 if word in index_word or index_word in word:
                     similarity = difflib.SequenceMatcher(None, word, index_word).ratio()
-                    if similarity > 0.6:  # minimal 60% mirip
+                    if similarity > 0.5:  # minimal 60% mirip
                         for entry_id in self.search_index[index_word]:
                             if entry_id not in relevant_entries:
                                 relevant_entries[entry_id] = {"score": 0, "matches": []}
@@ -153,8 +153,11 @@ class DialogueGenerator:
             output_stream = self.llm.create_chat_completion(
                 messages=self.messages,
                 max_tokens=32768,
-                temperature=1.5,
-                top_p=0.9,
+                temperature=0.8,
+                top_p=0.95,
+                top_k=40,
+                min_p=0.05,
+                repeat_penalty=1.1,
                 seed=-1,
                 stream=True
             )
@@ -299,6 +302,7 @@ Create 4-5 dialogue options that:
 2. Vary in approach: direct confrontation, questioning, presenting evidence, logical reasoning
 3. Range from aggressive to diplomatic in tone
 4. Include one "trap" option that seems good but is actually weak or off-topic
+5. Make sure the options are concise and natural-sounding
 
 Format your response as a JSON array of strings only. Each string should be a complete sentence the player could say.
 
@@ -314,8 +318,9 @@ Example response (inside `): `["Direct challenge using the fact", "Question that
             response = self.llm.create_chat_completion(
                 messages=choice_generation_messages,
                 max_tokens=32768,
-                temperature=1.,
+                temperature=0.8,
                 top_p=0.9,
+                seed=-1,
                 response_format={"type": "json_object"}
             )
             
@@ -384,7 +389,12 @@ Respond with ONLY one word: "PLAYER" or "NPC" with the quotation marks"""
             response = self.llm.create_chat_completion(
                 messages=judge_messages,
                 max_tokens=32768,
-                temperature=0.5
+                temperature=0.8,
+                top_p=0.95,
+                top_k=40,
+                min_p=0.05,
+                repeat_penalty=1.1,
+                seed=-1,
             )
             verdict = response['choices'][0]['message']['content'].strip().upper()
             
