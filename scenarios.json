@@ -1,0 +1,64 @@
+{
+  "scenarios": [
+    {
+      "character": "Arrogant Antique Dealer",
+      "lie": "This dagger is the authentic 'Serpent's Fang,' forged in the Majapahit era",
+      "knowledge_type": "antique",
+      "rounds": 5,
+      "background": "You're investigating a suspicious antique sale. The dealer claims this dagger is a priceless Majapahit artifact, but something feels off about their story.",
+      "weaknesses": [
+        "Gets defensive when questioned about provenance documentation",
+        "Overconfident about historical knowledge but makes factual errors",
+        "Becomes evasive when pressed about dealer reputation and verification"
+      ]
+    },
+    {
+      "character": "Shifty Bartender",
+      "lie": "I haven't seen the man you're looking for. Nobody by that description has been in here all week",
+      "knowledge_type": "bartender",
+      "rounds": 4,
+      "background": "You're tracking down a missing person. The bartender claims ignorance, but you suspect they're hiding something important.",
+      "weaknesses": [
+        "Nervous when confronted with physical evidence",
+        "Contradicts himself when pressed about timeline details",
+        "Shows knowledge about things he claims not to know"
+      ]
+    },
+    {
+      "character": "Suspicious Insurance Adjuster",
+      "lie": "The fire was clearly an accident caused by faulty wiring, there's no evidence of arson",
+      "knowledge_type": "insurance",
+      "rounds": 5,
+      "background": "You're investigating a suspicious house fire for insurance fraud. The adjuster is eager to close the case quickly, but the evidence doesn't add up.",
+      "weaknesses": [
+        "Dismisses fire investigation protocols too quickly",
+        "Shows unusual knowledge of the claimant's financial situation",
+        "Becomes agitated when questioned about proper investigation procedures"
+      ]
+    },
+    {
+      "character": "Corrupt Doctor",
+      "lie": "I never prescribed those medications to that patient, they must have forged the prescriptions",
+      "knowledge_type": "medical",
+      "rounds": 4,
+      "background": "You're investigating prescription drug fraud. A doctor claims they never prescribed dangerous medications, but you have evidence suggesting otherwise.",
+      "weaknesses": [
+        "Uncomfortable discussing prescription monitoring databases",
+        "Shows detailed knowledge of drugs he claims never to prescribe",
+        "Deflects when asked about proper prescribing protocols"
+      ]
+    },
+    {
+      "character": "Academic Fraudster",
+      "lie": "My research is completely original and has been peer-reviewed by top experts in the field",
+      "knowledge_type": "academic",
+      "rounds": 5,
+      "background": "You're investigating academic misconduct. A researcher claims their groundbreaking study is legitimate, but colleagues suspect plagiarism and data fabrication.",
+      "weaknesses": [
+        "Vague about specific peer review details and journal processes",
+        "Becomes hostile when methodology is questioned",
+        "Shows nervousness when plagiarism detection tools are mentioned"
+      ]
+    }
+  ]
+}
