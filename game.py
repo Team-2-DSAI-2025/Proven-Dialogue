@@ -125,6 +125,7 @@ class DialogueGenerator:
         self.character_name = ""
         self.character_lie = ""
         self.character_weaknesses = []
+        self.weakness_hit_count = 0  # hitung kena weakness berapa kali
 
     def _load_model(self):
         if not os.path.exists(self.model_path):
@@ -228,6 +229,7 @@ class DialogueGenerator:
         self.character_name = character
         self.character_lie = lie
         self.character_weaknesses = weaknesses or []
+        self.weakness_hit_count = 0  # Reset hits count for new scenario
         
         # bikin weakness descriptions buat prompt
         weakness_text = ""
@@ -269,7 +271,9 @@ Remember: You are {character} defending "{lie}" - make it believable!"""
         weakness_hit = False
         if not skip_weakness_detection:
             weakness_hit = self._llm_detect_weakness_hit(player_rebuttal)
-
+            if weakness_hit:
+                self.weakness_hit_count += 1  # Count the hit!
+        
         # Add player input to COMPLETE history
         player_msg = {"role": "user", "content": f"Player: {player_rebuttal}"}
         self.complete_messages.append(player_msg)
@@ -404,55 +408,53 @@ Example response (inside `): `["Direct challenge using the fact", "Question that
                 "I have my doubts about your story."
             ]
 
-    def get_verdict(self):
-        print("\n--- The debate is over. Analyzing the arguments... ---")
-        
-        judge_messages = [
+    def admit_loss(self):
+        """
+        The target admits loss (player wins) - using LLM response with /no_think
+        """
+        messages = [
             {
                 "role": "system",
-                "content": """You are an expert debate judge. Analyze the conversation between the Player and NPC where:
-- The NPC was defending a false claim
-- The Player was trying to expose the lie using facts
-
-Evaluate based on:
-1. STRENGTH OF ARGUMENTS: Did the player present compelling evidence?
-2. LOGICAL CONSISTENCY: Did the player's points logically connect?
-3. PERSUASIVE POWER: Would a reasonable person be convinced?
-4. NPC RESISTANCE: How well did the NPC defend their position?
-
-The player wins if they presented strong, logical arguments that would convince a reasonable person. The NPC wins if they successfully maintained doubt or deflected the player's attacks.
-
-Respond with ONLY one word: "PLAYER" or "NPC" with the quotation marks"""
-            },
-            {
-                "role": "user",
-                "content": "Please judge this debate based on the strength of arguments and evidence presented."
+                "content": f"You are {self.character_name}, admitting defeat gracefully but reluctantly in a debate game. Respond in character, brief and natural. /no_think"
             }
         ]
-        
-        # Use COMPLETE history for judgment - includes panic responses
-        for msg in self.complete_messages[1:]:  # skip system message
-            judge_messages.append(msg)
-
         try:
             response = self.llm.create_chat_completion(
-                messages=judge_messages,
-                max_tokens=32768,
-                temperature=0.5
+                messages=messages,
+                max_tokens=150,
+                temperature=0.7,
+                top_p=0.9,
+                seed=-1
             )
-            verdict = response['choices'][0]['message']['content'].strip().upper()
-            
-            if "PLAYER" in verdict:
-                return "PLAYER"
-            elif "NPC" in verdict:
-                return "NPC"
-            else:
-                return "NPC"  # default ke NPC kalo ambiguous
-
+            reply = response['choices'][0]['message']['content'].strip()
+            print(f"{self.character_name}: {reply}")
         except Exception as e:
-            print(f"Error getting verdict: {e}")
-            return "NPC"
+            print(f"Error generating admit_loss response: {e}")
+            print(f"{self.character_name}: Fine, you win. I guess I was wrong.")
 
+    def trash_talk(self):
+        """
+        The target trash talks the player angrily due to losing (NPC wins)
+        """
+        messages = [
+            {
+                "role": "system",
+                "content": f"You are {self.character_name}, upset at being accused unjustly. Respond with a short trash talk. /no_think"
+            }
+        ]
+        try:
+            response = self.llm.create_chat_completion(
+                messages=messages,
+                max_tokens=600,
+                temperature=0.9,
+                top_p=0.9,
+                seed=-1
+            )
+            reply = response['choices'][0]['message']['content'].strip()
+            print(f"{self.character_name}: {reply}")
+        except Exception as e:
+            print(f"Error generating trash talk response: {e}")
+            print(f"{self.character_name}: You think you can just accuse me and get away with it? Think again!")
 
 class Game:
     def __init__(self, dialogue_generator):
@@ -702,15 +704,30 @@ class Game:
                 self.dialogue_generator.get_defensive_dialogue("You seem to be struggling to make a point.")
 
         print("\n" + "="*70)
-        verdict = self.dialogue_generator.get_verdict()
+
+        hit_count = self.dialogue_generator.weakness_hit_count
+        print(f"Weakness hits by player: {hit_count} out of {rounds} rounds.")
+
+        # hits needed = half + 1 buat  menang
+        hits_needed = (rounds // 2) + 1
+
+        if hit_count >= hits_needed:
+            verdict = "PLAYER"
+        else:
+            verdict = "NPC"
+
         print(f"FINAL VERDICT: {verdict} WINS!")
         
         if verdict == "PLAYER":
             print("VICTORY! Your research and strategic arguments were devastating!")
             print("You successfully used the RAG system to build an unbeatable case!")
+            # target ngaku kalah
+            self.dialogue_generator.admit_loss()
         else:
             print("DEFEAT! They managed to deflect your evidence...")
             print("Try different search strategies and fact combinations next time.")
+            # target trash talks player
+            self.dialogue_generator.trash_talk()
             
         print("="*70)
         return verdict == "PLAYER"
@@ -719,4 +736,3 @@ if __name__ == "__main__":
     dialogue_gen = DialogueGenerator(model_path=MODEL_PATH, n_gpu_layers=N_GPU_LAYERS)
     game = Game(dialogue_generator=dialogue_gen)
     game.play()
-	
