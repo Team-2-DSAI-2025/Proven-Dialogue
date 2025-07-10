@@ -124,6 +124,7 @@ class DialogueGenerator:
         self.messages = []
         self.character_name = ""
         self.character_lie = ""
+        self.character_weaknesses = []
 
     def _load_model(self):
         if not os.path.exists(self.model_path):
@@ -173,9 +174,18 @@ class DialogueGenerator:
             print(f"\nError during inference: {e}")
             return "I... I can't think right now."
 
-    def start_new_scenario(self, character, lie):
+    def start_new_scenario(self, character, lie, weaknesses=None):
         self.character_name = character
         self.character_lie = lie
+        self.character_weaknesses = weaknesses or []
+        
+        # bikin weakness descriptions buat prompt
+        weakness_text = ""
+        if self.character_weaknesses:
+            weakness_text = f"\n\nCHARACTER WEAKNESSES (show these when pressured):\n"
+            for weakness in self.character_weaknesses:
+                weakness_text += f"- {weakness}\n"
+        
         self.messages = [
             {
                 "role": "system",
@@ -188,6 +198,9 @@ PERSONALITY TRAITS:
 - You may deflect, question the player's expertise, or provide alternative explanations
 - You NEVER admit you're wrong, but you may show subtle signs of doubt when cornered
 
+WEAKNESSES:
+{weakness_text}
+
 CRITICAL RULES:
 - Respond ONLY with direct speech (no quotation marks, no actions, no narration)
 - Keep responses conversational and natural (1-3 sentences max)
@@ -195,6 +208,73 @@ CRITICAL RULES:
 - When presented with strong counter-evidence, don't fold immediately - find ways to dismiss or reframe it
 - Show personality: arrogance, nervousness, anger, or condescension as appropriate
 - First person perspective only
+- When the player hits your weaknesses, show the corresponding behavior but don't admit guilt
+
+Remember: You are {character} defending "{lie}" - make it believable!"""
+            }
+        ]
+
+    def _generate_streamed_response(self):
+        try:
+            self.messages[-1]['content'] += " /no_think"  # biar ga ada thinking process
+            output_stream = self.llm.create_chat_completion(
+                messages=self.messages,
+                max_tokens=32768,
+                temperature=1.5,
+                top_p=0.9,
+                seed=-1,
+                stream=True
+            )
+
+            full_response = ""
+            for chunk in output_stream:
+                delta = chunk['choices'][0]['delta']
+                if 'content' in delta:
+                    token = delta['content']
+                    full_response += token
+                    print(token, end='', flush=True)
+            
+            print("\n")
+            return full_response.strip()
+
+        except Exception as e:
+            print(f"\nError during inference: {e}")
+            return "I... I can't think right now."
+
+    def start_new_scenario(self, character, lie, weaknesses=None):
+        self.character_name = character
+        self.character_lie = lie
+        self.character_weaknesses = weaknesses or []
+        
+        # bikin weakness descriptions buat prompt
+        weakness_text = ""
+        if self.character_weaknesses:
+            weakness_text = f"\n\nCHARACTER WEAKNESSES (show these when pressured):\n"
+            for weakness in self.character_weaknesses:
+                weakness_text += f"- {weakness}\n"
+        
+        self.messages = [
+            {
+                "role": "system",
+                "content": f"""You are roleplaying as {character} in a debate game. You are COMMITTED to defending this position: "{lie}"
+
+PERSONALITY TRAITS:
+- You genuinely believe your claim is true (or desperately need others to believe it)
+- You're intelligent and will use logical-sounding arguments
+- When challenged, you become more defensive but try to maintain credibility
+- You may deflect, question the player's expertise, or provide alternative explanations
+- You NEVER admit you're wrong, but you may show subtle signs of doubt when cornered
+
+{weakness_text}
+
+CRITICAL RULES:
+- Respond ONLY with direct speech (no quotation marks, no actions, no narration)
+- Keep responses conversational and natural (1-3 sentences max)
+- Stay in character - you believe your position or need others to believe it
+- When presented with strong counter-evidence, don't fold immediately - find ways to dismiss or reframe it
+- Show personality: arrogance, nervousness, anger, or condescension as appropriate
+- First person perspective only
+- When the player hits your weaknesses, show the corresponding behavior but don't admit guilt
 
 Remember: You are {character} defending "{lie}" - make it believable!"""
             }
@@ -313,7 +393,7 @@ Respond with ONLY one word: "PLAYER" or "NPC" with the quotation marks"""
             elif "NPC" in verdict:
                 return "NPC"
             else:
-                return "NPC"  # default ke NPC kalo ambiguous
+                return "NPC#"  # default ke NPC kalo ambiguous
 
         except Exception as e:
             print(f"Error getting verdict: {e}")
@@ -323,43 +403,31 @@ Respond with ONLY one word: "PLAYER" or "NPC" with the quotation marks"""
 class Game:
     def __init__(self, dialogue_generator):
         self.dialogue_generator = dialogue_generator
-        self.scenarios = [
-            {
-                "character": "Arrogant Antique Dealer",
-                "lie": "This dagger is the authentic 'Serpent's Fang,' forged in the Majapahit era",
-                "knowledge_type": "antique",
-                "rounds": 5,
-                "background": "You're investigating a suspicious antique sale. The dealer claims this dagger is a priceless Majapahit artifact, but something feels off about their story."
-            },
-            {
-                "character": "Shifty Bartender", 
-                "lie": "I haven't seen the man you're looking for. Nobody by that description has been in here all week",
-                "knowledge_type": "bartender",
-                "rounds": 4,
-                "background": "You're tracking down a missing person. The bartender claims ignorance, but you suspect they're hiding something important."
-            },
-            {
-                "character": "Suspicious Insurance Adjuster",
-                "lie": "The fire was clearly an accident caused by faulty wiring, there's no evidence of arson",
-                "knowledge_type": "insurance",
-                "rounds": 5,
-                "background": "You're investigating a suspicious house fire for insurance fraud. The adjuster is eager to close the case quickly, but the evidence doesn't add up."
-            },
-            {
-                "character": "Corrupt Doctor",
-                "lie": "I never prescribed those medications to that patient, they must have forged the prescriptions",
-                "knowledge_type": "medical",
-                "rounds": 4,
-                "background": "You're investigating prescription drug fraud. A doctor claims they never prescribed dangerous medications, but you have evidence suggesting otherwise."
-            },
-            {
-                "character": "Academic Fraudster",
-                "lie": "My research is completely original and has been peer-reviewed by top experts in the field",
-                "knowledge_type": "academic",
-                "rounds": 5,
-                "background": "You're investigating academic misconduct. A researcher claims their groundbreaking study is legitimate, but colleagues suspect plagiarism and data fabrication."
-            }
-        ]
+        self.scenarios = self._load_scenarios()
+    
+    def _load_scenarios(self):
+        # load scenarios dari file JSON external
+        try:
+            json_path = os.path.join(os.path.dirname(__file__), 'scenarios.json')
+            with open(json_path, 'r', encoding='utf-8') as f:
+                scenarios_data = json.load(f)
+            return scenarios_data.get('scenarios', [])
+        except FileNotFoundError:
+            print("Scenarios file not found! Using basic fallback...")
+            # fallback kalo file ga ada
+            return [
+                {
+                    "character": "Generic NPC",
+                    "lie": "I'm telling the truth",
+                    "knowledge_type": "antique",
+                    "rounds": 3,
+                    "background": "Basic scenario",
+                    "weaknesses": ["Gets nervous when questioned"]
+                }
+            ]
+        except Exception as e:
+            print(f"Error loading scenarios: {e}")
+            return []
 
     def play(self):
         game_is_running = True
@@ -370,6 +438,9 @@ class Game:
             for i, scenario in enumerate(self.scenarios):
                 print(f"{i + 1}. Confront the {scenario['character']}")
                 print(f"   Case: {scenario['background'][:60]}...")
+                # tampilkan weakness hints kalo ada
+                if 'weaknesses' in scenario:
+                    print(f"   Hints: {len(scenario['weaknesses'])} known weaknesses")
             print("q. Quit Game")
 
             choice = input("\n> ")
@@ -380,7 +451,15 @@ class Game:
             try:
                 scenario_index = int(choice) - 1
                 if 0 <= scenario_index < len(self.scenarios):
-                    player_won = self.play_scenario(self.scenarios[scenario_index])
+                    # tampilkan weakness info sebelum mulai
+                    selected_scenario = self.scenarios[scenario_index]
+                    if 'weaknesses' in selected_scenario:
+                        print(f"\nKnown weaknesses of {selected_scenario['character']}:")
+                        for weakness in selected_scenario['weaknesses']:
+                            print(f"  - {weakness}")
+                        input("\nPress Enter to begin the confrontation...")
+                    
+                    player_won = self.play_scenario(selected_scenario)
                     if player_won:
                         print("\nVICTORY! Your investigative skills are incredible!")
                         continue_choice = input("Play another scenario? [y/n] > ").lower()
@@ -398,7 +477,14 @@ class Game:
     def play_scenario(self, scenario):
         # setup RAG components
         knowledge_base = KnowledgeBase(scenario['knowledge_type'])
-        self.dialogue_generator.start_new_scenario(scenario['character'], scenario['lie'])
+        
+        # pass weaknesses ke dialogue generator
+        weaknesses = scenario.get('weaknesses', [])
+        self.dialogue_generator.start_new_scenario(
+            scenario['character'], 
+            scenario['lie'],
+            weaknesses
+        )
         
         rounds = scenario['rounds']
         used_searches = []

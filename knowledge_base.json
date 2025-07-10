@@ -12,11 +12,19 @@
     "blade_construction_techniques": "Authentic Majapahit blades show distinctive folding patterns and forge welding marks invisible in modern reproductions.",
     "historical_documentation": "Proper historical artifacts require documented chain of custody, provenance records, and scholarly verification through multiple independent sources.",
     "iconography_analysis": "Medieval Southeast Asian weapons often feature religious and royal symbols with specific meanings that modern forgers frequently misunderstand or mix incorrectly.",
-    "museum_collection_records": "The National Museum of Indonesia has detailed catalogs of authentic Majapahit weapons, none of which match the description of this alleged 'Serpent's Fang'.",
+    "museum_collection_records": "The National Museum of Indonesia has detailed catalogs of authentic Majapahit weapons, none of which match the description of the alleged 'Serpent's Fang'.",
     "archaeological_context": "Legitimate Majapahit artifacts are always found in specific archaeological contexts with documented excavation records and stratigraphic evidence.",
     "expert_consensus": "Leading Southeast Asian archaeology experts universally agree that no weapon called 'Serpent's Fang' exists in historical Majapahit records.",
     "forgery_techniques": "Modern forgers often age steel using acid treatments and artificial patination that can be detected under microscopic examination.",
-    "dealer_reputation": "This particular antique dealer has been flagged by the Indonesian Cultural Heritage Agency for selling questionable artifacts without proper documentation."
+    "dealer_reputation": "Dealers lacking proper documentation for artifacts are often flagged by the Indonesian Cultural Heritage Agency for selling questionable items.",
+    "material_science_analysis": "X-ray fluorescence spectroscopy can reveal the exact elemental composition of metals, easily distinguishing modern alloys from historical ones.",
+    "cultural_heritage_laws": "Indonesian law requires all cultural artifacts to have export permits and documented provenance before legal international sale.",
+    "auction_house_verification": "Legitimate auction houses require extensive documentation and expert authentication before accepting historical artifacts for sale.",
+    "comparative_archaeology": "No similar 'Serpent's Fang' daggers exist in any major museum collections worldwide, despite extensive catalogs of Majapahit weapons.",
+    "historical_weapon_databases": "Digital databases of authenticated historical weapons contain no references to any artifact matching this description.",
+    "patination_analysis": "Natural patination on centuries-old metal follows specific chemical patterns that differ markedly from artificial aging techniques.",
+    "inscription_paleography": "The style and form of inscriptions on historical weapons can be dated and authenticated through paleographic analysis.",
+    "thermoluminescence_dating": "Certain materials in weapon construction can be dated using thermoluminescence, revealing when they were last heated during forging."
   },
   "bartender": {
     "witness_testimony": "Bar security cameras and regular customer witnesses provide reliable identification of patrons, especially during busy evening hours.",
@@ -34,7 +42,15 @@
     "receipt_records": "Point-of-sale systems automatically log all transactions with timestamps, making it impossible to hide cash payments completely.",
     "staff_schedules": "Employee work schedules are documented and can verify which staff members were present during specific time periods.",
     "liquor_inventory": "Bar inventory tracking systems record unusual consumption patterns that could indicate off-the-books customers.",
-    "neighborhood_witnesses": "Local shop owners and residents often notice unusual activity around establishments and can provide corroborating testimony."
+    "neighborhood_witnesses": "Local shop owners and residents often notice unusual activity around establishments and can provide corroborating testimony.",
+    "credit_card_processing": "Electronic payment systems create permanent records of transactions that can be traced and verified.",
+    "cellular_tower_data": "Cell phone tower records can place individuals at specific locations during specific time periods.",
+    "social_media_evidence": "Customers often post photos or check-ins at bars on social media, creating timestamped evidence of their presence.",
+    "liquor_license_compliance": "Licensed establishments must maintain detailed records of operations for regulatory compliance and inspection.",
+    "facial_recognition_systems": "Some modern bars use facial recognition technology to identify banned patrons or persons of interest.",
+    "cash_register_logs": "Even cash transactions are typically logged with timestamps in modern point-of-sale systems.",
+    "staff_communication_records": "Internal communication systems between staff often contain references to notable customers or incidents.",
+    "delivery_and_supplier_records": "Regular delivery schedules and supplier visits create additional witnesses to unusual activity at establishments."
   },
   "insurance": {
     "fire_investigation_protocols": "Professional fire investigators follow strict protocols to determine ignition sources, burn patterns, and evidence of accelerants.",
@@ -48,7 +64,17 @@
     "security_camera_analysis": "Surrounding businesses often have security cameras that can capture suspicious activity before fires occur.",
     "fire_department_response_records": "Emergency response logs document exact arrival times and initial observations that can contradict false claims.",
     "smoke_detector_evidence": "The absence or tampering of smoke detectors in a fire scene raises immediate red flags for investigators.",
-    "neighbor_testimony": "Neighbors often notice unusual smells, sounds, or activity before fires that can indicate premeditation."
+    "neighbor_testimony": "Neighbors often notice unusual smells, sounds, or activity before fires that can indicate premeditation.",
+    "burn_pattern_analysis": "Fire spreads in predictable patterns, and deviations from normal burn patterns can indicate accelerant use or multiple ignition points.",
+    "insurance_claim_timing": "Claims filed immediately after fires or with unusual details can indicate premeditation and fraud.",
+    "fire_suppression_evidence": "The failure of sprinkler systems or the disabling of fire suppression equipment suggests intentional fire setting.",
+    "utility_company_records": "Gas and electric companies maintain records of service disconnections and reconnections that can contradict arson alibis.",
+    "property_history_analysis": "Previous insurance claims or financial difficulties with a property can establish patterns of fraud.",
+    "expert_witness_testimony": "Fire investigation experts can provide detailed technical analysis that contradicts claims of accidental fires.",
+    "photographic_evidence": "Time-stamped photographs from before, during, and after fires can reveal evidence of accelerant use or staged scenes.",
+    "chemical_residue_analysis": "Laboratory analysis of debris can identify specific accelerants and their points of origin in suspected arson cases.",
+    "meteorological_data": "Weather conditions at the time of fires can be analyzed to determine if claimed electrical causes are plausible.",
+    "insurance_database_cross_reference": "National insurance databases can identify patterns of suspicious claims across multiple companies and locations."
   },
   "medical": {
     "prescription_database": "National prescription monitoring programs track all controlled substance prescriptions across multiple pharmacies and doctors.",
@@ -62,7 +88,17 @@
     "hospital_admission_records": "Emergency department visits for overdoses or drug-seeking behavior are documented in medical databases.",
     "pharmacy_security_cameras": "Most pharmacies maintain extensive security footage that can verify or disprove claims about prescription pickups.",
     "medical_expert_testimony": "Board-certified physicians can testify about proper prescribing practices and identify suspicious patterns.",
-    "drug_interaction_databases": "Medical databases track dangerous drug interactions that legitimate doctors would never prescribe together."
+    "drug_interaction_databases": "Medical databases track dangerous drug interactions that legitimate doctors would never prescribe together.",
+    "dea_audit_procedures": "The DEA conducts regular audits of physicians who prescribe controlled substances and maintains detailed records.",
+    "prescription_pad_security": "Medical prescription pads have security features and tracking systems to prevent forgery and unauthorized use.",
+    "electronic_health_records": "Modern EHR systems create permanent, timestamped logs of all medical activities and prescription orders.",
+    "medical_board_investigations": "State medical boards investigate complaints about physicians and maintain records of disciplinary actions.",
+    "pharmacy_chain_databases": "Large pharmacy chains share prescription data to identify suspicious patterns across multiple locations.",
+    "controlled_substance_quotas": "DEA quotas limit the amount of controlled substances doctors can prescribe, creating trackable limits.",
+    "medical_malpractice_insurance": "Malpractice insurance companies investigate unusual prescribing patterns that could indicate fraud or abuse.",
+    "peer_review_processes": "Medical institutions conduct peer reviews of physician prescribing practices to identify outliers and problematic patterns.",
+    "telemedicine_regulations": "Online prescribing is heavily regulated and monitored, with strict requirements for patient verification and consultation.",
+    "pharmaceutical_company_data": "Drug manufacturers track distribution patterns and can identify unusual prescribing behaviors or pill mill operations."
   },
   "academic": {
     "plagiarism_detection_software": "Modern plagiarism detection tools can identify copied content from millions of academic sources and websites.",
@@ -76,6 +112,16 @@
     "research_funding_records": "Grant funding agencies maintain records of research funding that can verify the legitimacy of claimed studies.",
     "conference_presentation_records": "Academic conferences maintain records of presentations that can verify or contradict claims about research dissemination.",
     "laboratory_notebook_standards": "Scientific research requires detailed laboratory notebooks that can be audited for authenticity.",
-    "statistical_analysis_verification": "Statistical experts can review claimed research results and identify impossible or fabricated data patterns."
+    "statistical_analysis_verification": "Statistical experts can review claimed research results and identify impossible or fabricated data patterns.",
+    "institutional_review_board_records": "Human subjects research requires IRB approval, creating verifiable documentation of legitimate studies.",
+    "research_collaboration_verification": "Co-authors and collaborators can verify their involvement in claimed research projects and publications.",
+    "data_repository_requirements": "Many journals now require raw data to be deposited in public repositories for verification.",
+    "academic_social_networks": "Platforms like ResearchGate and Academia.edu track academic profiles and can expose fraudulent claims.",
+    "journal_editor_verification": "Journal editors maintain records of submissions, reviews, and publication decisions that can be verified.",
+    "academic_search_engines": "Google Scholar and similar platforms track citation patterns and can identify suspicious or non-existent publications.",
+    "university_library_systems": "Academic libraries maintain comprehensive records of research activities and can verify access to claimed sources.",
+    "research_ethics_training": "Legitimate researchers must complete ethics training, creating verifiable records of their qualifications.",
+    "academic_misconduct_databases": "Organizations like ORI maintain databases of research misconduct findings that can expose repeat offenders.",
+    "dissertation_committee_records": "Graduate programs maintain detailed records of dissertation committees and defense proceedings."
   }
 }
